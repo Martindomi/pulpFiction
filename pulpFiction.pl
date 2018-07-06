@@ -78,22 +78,18 @@ amigo(jules, jimmie).
 amigo(vincent, elVendedor).
 
 /*personaje Peligrioso*/
-
-tipoMafioso(Nombre,Tipo):-
-	personaje(Nombre, mafioso(Tipo)).
 	
-robaLicorerias(Nombre):-
-	personaje(Nombre, ladron(ListaDeRobos)),
+esPersonajePeligroso(mafioso(maton)).
+esPersonajePeligroso(ladron(ListaDeRobos)):-
 	member(licorerias,ListaDeRobos).
 
-esPeligroso(Nombre):- 
-	tipoMafioso(Nombre,maton).
-esPeligroso(Nombre):-
-	robaLicorerias(Nombre).
+esPeligroso(Nombre):-	
+	personaje(Nombre, Ocupacion),
+	esPersonajePeligroso(Ocupacion).	
 esPeligroso(Nombre):-
 	trabajaPara(Jefe,Nombre),
 	esPeligroso(Jefe).
-	
+
 /* San Cayetano */
 
 sonAmigos(Personaje, OtroPersonaje):-
@@ -117,16 +113,16 @@ sanCayetano(Personaje):-
 	
 /* Nivel de Respeto */
 
-esActriz(Nombre, CantidadPeliculas):-
-	personaje(Nombre, actriz(Peliculas)),
-	length(Peliculas,CantidadPeliculas).
-nivelRespeto(Personaje, Respeto):-
-	esActriz(Personaje, CantidadPeliculas),
+cuantoRespeto(actriz(Peliculas), Respeto):-
+	length(Peliculas,CantidadPeliculas),
 	Respeto is CantidadPeliculas / 10.
-nivelRespeto(Personaje, 10):-
-	tipoMafioso(Personaje, resuelveProblemas).
-nivelRespeto(Personaje, 20):-
-	tipoMafioso(Personaje, capo).
+cuantoRespeto(mafioso(resuelveProblemas), 10).
+cuantoRespeto(mafioso(capo), 20).
+
+
+nivelRespeto(Personaje,Respeto):-
+	personaje(Personaje,Ocupacion),
+	cuantoRespeto(Ocupacion,Respeto).
 nivelRespeto(vincent, 15).
 
 /* Personajes Respetables */
